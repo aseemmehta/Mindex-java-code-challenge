@@ -1,4 +1,36 @@
 # Coding Challenge
+
+## Example runs
+Reporting Structure
+http://localhost:8080/reportingStructure/16a596ae-edd3-4847-99fe-c4518e82c86f
+
+{"employee":{"employeeId":"16a596ae-edd3-4847-99fe-c4518e82c86f","firstName":"John","lastName":"Lennon","position":"Development Manager","department":"Engineering","directReports":[{"employeeId":"b7839309-3348-463b-a7e3-5de1c168beb3","firstName":null,"lastName":null,"position":null,"department":null,"directReports":null},{"employeeId":"03aa1462-ffa9-4978-901b-7c001562cf6f","firstName":null,"lastName":null,"position":null,"department":null,"directReports":null}]},"numberOfReports":4}
+
+
+Compensation Post
+http://localhost:8080/compensation
+  {"employee":{
+    "employeeId" : "16a596ae-edd3-4847-99fe-c4518e82c86f",
+    "firstName" : "John",
+    "lastName" : "Lennon",
+    "position" : "Development Manager",
+    "department" : "Engineering",
+    "directReports" : [
+      {
+        "employeeId" : "b7839309-3348-463b-a7e3-5de1c168beb3"
+      },
+      {
+        "employeeId": "03aa1462-ffa9-4978-901b-7c001562cf6f"
+      }
+    ]
+  },"salary": 80000,
+  "effectiveDate":"08/12/2021"
+  }
+  
+  Compensation get
+  http://localhost:8080/compensation/16a596ae-edd3-4847-99fe-c4518e82c86f
+  {"employee":{"employeeId":"16a596ae-edd3-4847-99fe-c4518e82c86f","firstName":"John","lastName":"Lennon","position":"Development Manager","department":"Engineering","directReports":[{"employeeId":"b7839309-3348-463b-a7e3-5de1c168beb3","firstName":null,"lastName":null,"position":null,"department":null,"directReports":null},{"employeeId":"03aa1462-ffa9-4978-901b-7c001562cf6f","firstName":null,"lastName":null,"position":null,"department":null,"directReports":null}]},"salary":80000,"effectiveDate":"08/12/2021"}
+
 ## What's Provided
 A simple [Spring Boot](https://projects.spring.io/spring-boot/) web application has been created and bootstrapped 
 with data. The application contains information about all employees at a company. On application start-up, an in-memory 
