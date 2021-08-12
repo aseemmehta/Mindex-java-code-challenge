@@ -1,5 +1,7 @@
 package com.mindex.challenge.service.impl;
 
+import com.mindex.challenge.data.Compensation;
+import com.mindex.challenge.data.ReportingStructure;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.service.EmployeeService;
 import org.junit.Before;
@@ -24,6 +26,10 @@ public class EmployeeServiceImplTest {
 
     private String employeeUrl;
     private String employeeIdUrl;
+    private String compCreateUrl;
+    private String compReadUrl;
+    private String reportingStructureUrl;
+
 
     @Autowired
     private EmployeeService employeeService;
@@ -38,6 +44,10 @@ public class EmployeeServiceImplTest {
     public void setup() {
         employeeUrl = "http://localhost:" + port + "/employee";
         employeeIdUrl = "http://localhost:" + port + "/employee/{id}";
+        compCreateUrl = "http://localhost:" + port + "/compensation";
+        compReadUrl = "http://localhost:" + port + "/compensation/{id}";
+        reportingStructureUrl = "http://localhost:" + port + "/reportingStructure/{id}";
+
     }
 
     @Test
@@ -75,6 +85,37 @@ public class EmployeeServiceImplTest {
                         readEmployee.getEmployeeId()).getBody();
 
         assertEmployeeEquivalence(readEmployee, updatedEmployee);
+
+
+        // CountNumberOfReports checks
+        ReportingStructure reportingStructure = restTemplate.getForObject(reportingStructureUrl,
+                ReportingStructure.class, createdEmployee.getEmployeeId());
+        assertNotNull(reportingStructure.getNumberOfReports());
+        int count = reportingStructure.getNumberOfReports();
+        assertEquals(4, count);
+
+
+
+        // Compensation checks
+        assertNotNull(createdEmployee.getEmployeeId());
+
+
+        Compensation testComp = new Compensation();
+        testComp.setEmployee(createdEmployee);
+        testComp.setSalary(80000);
+        testComp.setEffectiveDate("08/12/2021");
+
+
+        // Create Compensation checks
+        Compensation createComp = restTemplate.postForEntity(compCreateUrl, testComp, Compensation.class).getBody();
+        assertEmployeeEquivalence(testComp.getEmployee(), createComp.getEmployee());
+        assertEquals(testComp.getSalary(), createComp.getSalary());
+
+        //Read Compensation checks
+        Compensation readCompensation = restTemplate.getForEntity(compReadUrl, Compensation.class, createComp.getEmployee().getEmployeeId()).getBody();
+        assertEmployeeEquivalence(createComp.getEmployee(), readCompensation.getEmployee());
+        assertEquals(createComp.getSalary(), readCompensation.getSalary());
+
     }
 
     private static void assertEmployeeEquivalence(Employee expected, Employee actual) {

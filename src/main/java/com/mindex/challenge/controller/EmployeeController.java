@@ -1,5 +1,7 @@
 package com.mindex.challenge.controller;
 
+import com.mindex.challenge.data.Compensation;
+import com.mindex.challenge.data.ReportingStructure;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.service.EmployeeService;
 import org.slf4j.Logger;
@@ -27,6 +29,7 @@ public class EmployeeController {
 
         return employeeService.read(id);
     }
+	
 
     @PutMapping("/employee/{id}")
     public Employee update(@PathVariable String id, @RequestBody Employee employee) {
@@ -35,4 +38,32 @@ public class EmployeeController {
         employee.setEmployeeId(id);
         return employeeService.update(employee);
     }
+
+    @GetMapping("/reportingStructure/{id}")
+    public ReportingStructure exec(@PathVariable String id) {
+        LOG.debug("Received employee create request for id [{}]", id);
+		int numberOfReports = employeeService.exec(id,0);
+		
+		ReportingStructure reportingStructure = new ReportingStructure();
+
+        reportingStructure.setEmployee(employeeService.read(id));
+        reportingStructure.setNumberOfReports(numberOfReports);
+		return reportingStructure;
+    }
+
+    @PostMapping("/compensation")
+    public Compensation createComp(@RequestBody Compensation comp) {
+        LOG.debug("Received employee create request for [{}]", comp);
+
+        return employeeService.createComp(comp);
+    }
+
+	@GetMapping("/compensation/{id}")
+    public Compensation readComp(@PathVariable String id) {
+        LOG.debug("Received compensation find request for id [{}]", id);
+
+        return employeeService.readComp(id);
+    }
+
+
 }
